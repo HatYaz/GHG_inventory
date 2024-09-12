@@ -2,7 +2,7 @@ import requests
 import json
 
 # Replace with your OpenWeatherMap API key
-API_KEY = '0c3f58070422feee28b2636e765bbfa8'
+API_KEY = 'add ur API here'
 
 # Rimouski's coordinates
 LATITUDE = 48.4432
