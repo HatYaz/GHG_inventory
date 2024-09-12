@@ -1,0 +1,50 @@
+import requests
+import json
+
+# Replace with your OpenWeatherMap API key
+API_KEY = 'your_openweathermap_api_key'
+
+# Rimouski's coordinates
+LATITUDE = 48.4432
+LONGITUDE = -68.5201
+
+# URL for OpenWeatherMap Air Pollution API
+URL = f'http://api.openweathermap.org/data/2.5/air_pollution?lat={LATITUDE}&lon={LONGITUDE}&appid={API_KEY}'
+
+def get_air_quality_data():
+    response = requests.get(URL)
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        print(f"Error: Unable to fetch data (Status Code: {response.status_code})")
+        return None
+
+def process_data(data):
+    if data:
+        print("Air Quality Data:")
+        print(json.dumps(data, indent=4))
+        # Extracting relevant GHG information
+        components = data.get('list', [{}])[0].get('components', {})
+        co = components.get('co', 'No data')
+        no = components.get('no', 'No data')
+        no2 = components.get('no2', 'No data')
+        o3 = components.get('o3', 'No data')
+        so2 = components.get('so2', 'No data')
+        pm2_5 = components.get('pm2_5', 'No data')
+        pm10 = components.get('pm10', 'No data')
+
+        print("\nGreenhouse Gases and Air Pollutants:")
+        print(f"CO (Carbon Monoxide): {co} µg/m³")
+        print(f"NO (Nitric Oxide): {no} µg/m³")
+        print(f"NO2 (Nitrogen Dioxide): {no2} µg/m³")
+        print(f"O3 (Ozone): {o3} µg/m³")
+        print(f"SO2 (Sulfur Dioxide): {so2} µg/m³")
+        print(f"PM2.5 (Particulate Matter < 2.5 µm): {pm2_5} µg/m³")
+        print(f"PM10 (Particulate Matter < 10 µm): {pm10} µg/m³")
+    else:
+        print("No data to process.")
+
+if __name__ == "__main__":
+    air_quality_data = get_air_quality_data()
+    process_data(air_quality_data)
